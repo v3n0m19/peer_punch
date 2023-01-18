@@ -25,7 +25,7 @@ void *send_msg(void *args)
     {   
         memset(&msg, 0, sizeof(msg));
         printf("Sender : ");
-        scanf("%s", msg);
+
         sendto( sockfd, (const char *)msg, strlen(msg), MSG_CONFIRM, (const struct sockaddr *)&servaddr, sizeof(servaddr));
     }
 }
@@ -42,9 +42,6 @@ void *recv_msg(void *args)
         memset(&buffer, 0, sizeof(buffer));
         n = recvfrom(sockfd, (char *)buffer, MAXLINE, MSG_WAITALL, (struct sockaddr *)&servaddr, (socklen_t *)&len);
         printf("\t Reciever: %s",buffer);
-        // buffer[n] = '\0';
-        // puts(buffer);
-        // printf("\n");
 
     }
 }
@@ -54,14 +51,7 @@ int client_func(int sockfd, char ip_addr[], int port)
     char buffer[MAXLINE];
 
     struct sockaddr_in servaddr;
-    // Creating socket file descriptor
-    // if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
-    // {
-    // 	perror("socket creation failed");
-    // 	exit(EXIT_FAILURE);
-    // }
     memset(&servaddr, 0, sizeof(servaddr));
-    // Filling server information
     servaddr.sin_family = AF_INET;
     servaddr.sin_port = htons(port);
     servaddr.sin_addr.s_addr = inet_addr(ip_addr);
@@ -92,8 +82,5 @@ int client_func(int sockfd, char ip_addr[], int port)
     }
     int ret1 = pthread_join(threads[0],NULL);
     int ret2 = pthread_join(threads[1],NULL);
-    // buffer[n] = '\0';
-    // printf("Server : %s\n", buffer);
-    // close(sockfd);
     return 0;
 }
