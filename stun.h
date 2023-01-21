@@ -45,7 +45,7 @@ struct stun_info stun_in()
 
 	n = bind(sockfd,(struct sockaddr *)&localaddr,sizeof(localaddr));
 
-        printf("socket opened to  %s:%d  at local port %d\n",stun_server_ip,stun_server_port,local_port);
+    printf("Socket opened to  %s:%d  at local port %d\n",stun_server_ip,stun_server_port,local_port);
 
 	* (short *)(&bindingReq[0]) = htons(0x0001);    
 	* (short *)(&bindingReq[2]) = htons(0x0000);    

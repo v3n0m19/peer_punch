@@ -8,10 +8,15 @@
 #include <netinet/in.h>
 #include <pthread.h>
 #include <ncurses.h>
+#include <time.h>
 
 #define MAXLINE 1024
 #define MAXSIZE 1024
 
+bool check_flag = true;
+char check_str[12] = "$@6%9*4!&2#0";
+char exit_str[9]="EXIT_CHAT";
+char exit_msg[100]="User has exited the chat. Please type EXIT_CHAT to exit as well.";
 typedef struct
 {
     int sockfd;
@@ -21,30 +26,41 @@ typedef struct
     WINDOW *rbox;
 } func_args;
 
+
+int client_func(int sockfd, char ip_addr[], int port, WINDOW *ibox, WINDOW *sbox, WINDOW *rbox);
+void *send_msg(void *args);
+void *recv_msg(void *args);
+
 void *send_msg(void *args)
 {
-    func_args *ac_args = args;//typecasted here use ac_args moron developer :)
+
+    func_args *ac_args = args; // typecasted here use ac_args moron developer :)
     int sockfd = ac_args->sockfd;
     struct sockaddr_in servaddr = ac_args->servaddr;
 
-    WINDOW * input_box = ac_args->ibox;
-    WINDOW * sender_box = ac_args->sbox; 
-    int line_count=1;
+    WINDOW *input_box = ac_args->ibox;
+    WINDOW *sender_box = ac_args->sbox;
+    int line_count = 1;
     char msg[MAXSIZE];
     while (1)
     {
         memset(&msg, 0, sizeof(msg));
-        // printf("Sender : ");
-        // scanf("%s",msg);
+        while (check_flag)
+        {
+            sendto(sockfd, (const char *)check_str, strlen(check_str), MSG_CONFIRM, (const struct sockaddr *)&servaddr, sizeof(servaddr));
+        }
 
-        mvwgetstr(input_box,1,1,msg);
-        wmove(input_box,1,1);
+        mvwgetstr(input_box, 1, 1, msg);
+        int exit_count=0;
+        for (int i = 0; i < 9; i++){if (msg[i] == exit_str[i])exit_count++;}
+        if(exit_count==9){sendto(sockfd, (const char *)exit_msg, strlen(exit_msg), MSG_CONFIRM, (const struct sockaddr *)&servaddr, sizeof(servaddr));erase();refresh();exit(0);}
+        wmove(input_box, 1, 1);
         wclrtoeol(input_box);
         wrefresh(input_box);
-        mvwprintw(sender_box,line_count,1,msg);
-        wmove(input_box,1,1);
+        mvwprintw(sender_box, line_count, 1, msg);
+        wmove(input_box, 1, 1);
         wrefresh(sender_box);
-        refresh(); //dal diya bas
+        refresh(); // dal diya bas
         line_count++;
 
         sendto(sockfd, (const char *)msg, strlen(msg), MSG_CONFIRM, (const struct sockaddr *)&servaddr, sizeof(servaddr));
@@ -56,22 +72,45 @@ void *recv_msg(void *args)
     func_args *ac_args = args;
     int sockfd = ac_args->sockfd;
     struct sockaddr_in servaddr = ac_args->servaddr;
-    int n, len, lc=1;
-    WINDOW * reciever_box = ac_args->rbox;
+    int n, len, lc = 1;
+    WINDOW *reciever_box = ac_args->rbox;
+    WINDOW *input_box = ac_args->ibox;
     char buffer[MAXSIZE];
     while (1)
     {
         memset(&buffer, 0, sizeof(buffer));
         n = recvfrom(sockfd, (char *)buffer, MAXLINE, MSG_WAITALL, (struct sockaddr *)&servaddr, (socklen_t *)&len);
         // printf("\t Reciever: %s", buffer);
-    
-        mvwprintw(reciever_box,lc,1,buffer);
+        int count = 0;
+        if (check_flag)
+        {
+            count = 0;
+            for (int i = 0; i < 12; i++)
+            {
+                if (buffer[i] == check_str[i])
+                    count++;
+            }
+            if (count == 12)
+                check_flag = false;
+        }
+        wmove(reciever_box, 1, 1);
+        count =0;
+        for (int i = 0; i < 12; i++)
+        {
+            if (buffer[i] == check_str[i])
+                count++;
+        }
+        if (count != 12)
+        {
+            mvwprintw(reciever_box, lc, 1, buffer);
+            lc++;
+        }
+
         wrefresh(reciever_box);
-        lc++;
-    
+        
     }
 }
-int client_func(int sockfd, char ip_addr[], int port,WINDOW* ibox, WINDOW* sbox, WINDOW* rbox)
+int client_func(int sockfd, char ip_addr[], int port, WINDOW *ibox, WINDOW *sbox, WINDOW *rbox)
 {
 
     char buffer[MAXLINE];
@@ -94,9 +133,9 @@ int client_func(int sockfd, char ip_addr[], int port,WINDOW* ibox, WINDOW* sbox,
     args->sockfd = sockfd;
     args->servaddr = servaddr;
 
-    args->ibox=ibox;
-    args->sbox=sbox;
-    args->rbox=rbox;
+    args->ibox = ibox;
+    args->sbox = sbox;
+    args->rbox = rbox;
 
     int rc1 = pthread_create(&threads[0], NULL, send_msg, (void *)args);
     if (rc1)
