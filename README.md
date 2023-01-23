@@ -1,18 +1,3 @@
- .S    S.     sSSs_sSSs    S.        sSSs          sSSs   .S    S.    .S_SSSs    sdSS_SSSSSSbs  
-.SS    SS.   d%%SP~YS%%b   SS.      d%%SP         d%%SP  .SS    SS.  .SS~SSSSS   YSSS~S%SSSSSP  
-S%S    S%S  d%S'     `S%b  S%S     d%S'          d%S'    S%S    S%S  S%S   SSSS       S%S       
-S%S    S%S  S%S       S%S  S%S     S%S           S%S     S%S    S%S  S%S    S%S       S%S       
-S%S SSSS%S  S&S       S&S  S&S     S&S           S&S     S%S SSSS%S  S%S SSSS%S       S&S       
-S&S  SSS&S  S&S       S&S  S&S     S&S_Ss        S&S     S&S  SSS&S  S&S  SSS%S       S&S       
-S&S    S&S  S&S       S&S  S&S     S&S~SP        S&S     S&S    S&S  S&S    S&S       S&S       
-S&S    S&S  S&S       S&S  S&S     S&S           S&S     S&S    S&S  S&S    S&S       S&S       
-S*S    S*S  S*b       d*S  S*b     S*b           S*b     S*S    S*S  S*S    S&S       S*S       
-S*S    S*S  S*S.     .S*S  S*S.    S*S.          S*S.    S*S    S*S  S*S    S*S       S*S       
-S*S    S*S   SSSbs_sdSSS    SSSbs   SSSbs         SSSbs  S*S    S*S  S*S    S*S       S*S       
-SSS    S*S    YSSP~YSSY      YSSP    YSSP          YSSP  SSS    S*S  SSS    S*S       S*S       
-       SP                                                       SP          SP        SP        
-       Y                                                        Y           Y         Y         
-
 Hole chat is a chat application based on the concept of UDP hole punching. It is cli based and work only with linux to limitations of thread creation and other stuff in windows. 
 
 In order to use the application :
