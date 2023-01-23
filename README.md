@@ -11,7 +11,7 @@ Use the make command to compile the file and then run ./holechat
 Make sure your public port is 60001 before continuing
 Enter the reciever's public IP and port and start chatting
 
-Currently the application has some issues (which I am aware of,others maybe there but to me they don't exist :) )like:
+Currently the application has some issues (which I am aware of, others maybe there but to me they don't exist :) )like:
 1. There is no scroll feature
 2. There are some losses and out of order message delivery (This is an inherent problem UDP :( )
 3. The messages aren't encrypted
