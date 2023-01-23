@@ -17,6 +17,7 @@ bool check_flag = true;
 char check_str[12] = "$@6%9*4!&2#0";
 char exit_str[9]="EXIT_CHAT";
 char exit_msg[100]="User has exited the chat. Please type EXIT_CHAT to exit as well.";
+
 typedef struct
 {
     int sockfd;
@@ -27,14 +28,15 @@ typedef struct
 } func_args;
 
 
-int client_func(int sockfd, char ip_addr[], int port, WINDOW *ibox, WINDOW *sbox, WINDOW *rbox);
+int udp_func(int sockfd, char ip_addr[], int port, WINDOW *ibox, WINDOW *sbox, WINDOW *rbox);
+
 void *send_msg(void *args);
 void *recv_msg(void *args);
 
 void *send_msg(void *args)
 {
 
-    func_args *ac_args = args; // typecasted here use ac_args moron developer :)
+    func_args *ac_args = args; 
     int sockfd = ac_args->sockfd;
     struct sockaddr_in servaddr = ac_args->servaddr;
 
@@ -44,9 +46,11 @@ void *send_msg(void *args)
     char msg[MAXSIZE];
     while (1)
     {
+        uint64_t timer = INT64_MAX;
         memset(&msg, 0, sizeof(msg));
         while (check_flag)
         {
+  
             sendto(sockfd, (const char *)check_str, strlen(check_str), MSG_CONFIRM, (const struct sockaddr *)&servaddr, sizeof(servaddr));
         }
 
@@ -57,10 +61,25 @@ void *send_msg(void *args)
         wmove(input_box, 1, 1);
         wclrtoeol(input_box);
         wrefresh(input_box);
-        mvwprintw(sender_box, line_count, 1, msg);
-        wmove(input_box, 1, 1);
+
+        int max_x = getmaxx(sender_box);
+            int print_cursor=1;
+            int print_ch=0;
+            while(print_ch<strlen(msg))
+            {
+                mvwaddch(sender_box,line_count,print_cursor,msg[print_ch]);
+                if(print_cursor== (max_x-2))
+                {
+                    line_count++;
+                    print_cursor=1;
+                }
+                else
+                    print_cursor++;
+                print_ch++;
+            }
+
         wrefresh(sender_box);
-        refresh(); // dal diya bas
+        refresh(); 
         line_count++;
 
         sendto(sockfd, (const char *)msg, strlen(msg), MSG_CONFIRM, (const struct sockaddr *)&servaddr, sizeof(servaddr));
@@ -80,7 +99,7 @@ void *recv_msg(void *args)
     {
         memset(&buffer, 0, sizeof(buffer));
         n = recvfrom(sockfd, (char *)buffer, MAXLINE, MSG_WAITALL, (struct sockaddr *)&servaddr, (socklen_t *)&len);
-        // printf("\t Reciever: %s", buffer);
+
         int count = 0;
         if (check_flag)
         {
@@ -91,9 +110,12 @@ void *recv_msg(void *args)
                     count++;
             }
             if (count == 12)
+            {
                 check_flag = false;
+            }
         }
         wmove(reciever_box, 1, 1);
+        
         count =0;
         for (int i = 0; i < 12; i++)
         {
@@ -102,15 +124,34 @@ void *recv_msg(void *args)
         }
         if (count != 12)
         {
-            mvwprintw(reciever_box, lc, 1, buffer);
+            int max_x = getmaxx(reciever_box);
+            int print_cursor=1;
+            int print_ch=0;
+            while(print_ch<strlen(buffer))
+            {
+                mvwaddch(reciever_box,lc,print_cursor,buffer[print_ch]);
+                if(print_cursor== (max_x-2))
+                {
+                    lc++;
+                    print_cursor=1;
+                }
+                else
+                    print_cursor++;
+                print_ch++;
+            }
+
+
             lc++;
         }
 
+        
+        wrefresh(input_box);
         wrefresh(reciever_box);
+        refresh();
         
     }
 }
-int client_func(int sockfd, char ip_addr[], int port, WINDOW *ibox, WINDOW *sbox, WINDOW *rbox)
+int udp_func(int sockfd, char ip_addr[], int port, WINDOW *ibox, WINDOW *sbox, WINDOW *rbox)
 {
 
     char buffer[MAXLINE];
