@@ -13,7 +13,7 @@ Enter the reciever's public IP and port and start chatting
 
 Currently the application has some issues (which I am aware of, others maybe there)like:
 1. There is no scroll feature
-2. There are some losses and out of order message delivery (This is an inherent problem UDP :( )
+2. There are some losses and out of order message delivery (This is an inherent problem UDP in :( )
 3. The messages aren't encrypted
 4. The indentation of terminal changes after running the application 
 
