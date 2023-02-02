@@ -1,4 +1,4 @@
-Hole chat is a chat application based on the concept of UDP hole punching. It is cli based and works only with linux due to limitations of thread creation and other stuff in windows. 
+Peer Punch is a chat application based on the concept of UDP hole punching. It is cli based and works only with linux due to limitations of thread creation and other stuff in windows. 
 
 To use the application:
 
