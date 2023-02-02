@@ -1,2 +1,3 @@
-holepunch: hole_punch.c
-	gcc hole_punch.c -lncurses -o holechat
+peerpunch: main.c
+	reset
+	gcc main.c -lncurses -o peerpunch

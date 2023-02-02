@@ -1,18 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <arpa/inet.h>
-#include <netinet/in.h>
-#include <pthread.h>
-#include <ncurses.h>
-#include <time.h>
-
-#define MAXLINE 1024
-#define MAXSIZE 1024
-
 bool check_flag = true;
 char check_str[12] = "$@6%9*4!&2#0";
 char exit_str[9]="EXIT_CHAT";

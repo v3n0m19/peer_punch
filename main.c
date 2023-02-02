@@ -1,7 +1,4 @@
-#include "stun.h"
-#include "udp_punch.h"
-#include <string.h>
-#define MAX_L 128
+#include"include/peer_punch.h"
 void print_image(FILE *fptr);
 int main()
 {
@@ -10,7 +7,7 @@ int main()
     int port_num;
     int choice = 0;
     struct stun_info s1;
-    char *fname = "hole.txt";
+    char *fname = "assets/logo.txt";
     FILE *fptr = NULL;
     if((fptr = fopen(fname,"r")) == NULL)
     {
