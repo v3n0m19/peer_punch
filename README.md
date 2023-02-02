@@ -4,19 +4,27 @@ To use the application:
 
 1. Clone the repository:
 
-    ```$ git clone https://github.com/v3n0m19/peer_punch.git``` 
+    ```
+    git clone https://github.com/v3n0m19/peer_punch.git
+    ``` 
 
 2. Navigate to the project directory
 
-    ```$ cd peer_punch```
+    ```
+    cd peer_punch
+    ```
 
 3. Compile the application using make
 
-    ```$ make```
+    ```
+    make
+    ```
 
 4. Run the application
 
-    ```$ ./peerpunch```
+    ```
+    ./peerpunch
+    ```
 
 ## License
 
